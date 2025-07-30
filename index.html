@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parabéns pelo Benefício!</title>
+  <style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000;
+
+    /* Fundo com pontos alaranjados */
+    background-image:
+      radial-gradient(circle, rgba(255,165,0,0.1) 1px, transparent 1px),
+      url('wolverin.jpg'); /* ← Substitua por sua imagem de destaque */
+    
+    background-size: 40px 40px, cover;
+    background-position: top left, center center;
+    background-repeat: repeat, no-repeat;
+    background-attachment: scroll, fixed;
+    color: #fff;
+  }
+
+  .logo {
+    display: block;
+    margin: 20px auto;
+    width: 180px;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .box {
+  padding: 20px;
+  max-width: 400px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+  text-align: center;
+  margin-bottom: 60px; /* isso cria espaço para a logo */
+}
+
+  .box h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: #ffbb00; /* ← Adicione ou altere esta linha */
+    text-shadow: 
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;  /* Contorno preto */
+  }
+
+  input[type="text"] {
+    width: 80%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+
+  .whatsapp-btn {
+    background-color: #25d366;
+    color: white;
+    font-size: 18px;
+    padding: 16px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+
+  .whatsapp-btn:hover {
+    background-color: #1ebe5b;
+  }
+
+  .quadro-aviso {
+    background: #fffbe6;
+    border: 3px inset #ccc;
+    padding: 15px;
+    font-family: 'Montserrat', sans-serif;
+    color: #000;
+    text-align: center;
+    line-height: 1.5;
+    border-radius: 18px;
+  }
+
+  .quadro-aviso h4 {
+    margin: 0 0 10px 0;
+  }
+
+  @media screen and (max-width: 480px) {
+  .box {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  input[type="text"],
+  .whatsapp-btn {
+    width: 80%;
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .box h2 {
+    font-size: 18px;
+  }
+
+  .quadro-aviso {
+  padding: 10px;
+  font-size: 14px;
+}
+
+  .logo {
+    width: 140px;
+  }
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('app-destaque.png'); /* Substitua pelo nome da sua imagem */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.15; /* Ajuste para mais ou menos transparência */
+  z-index: -1;
+}
+
+@media (max-width: 600px) {
+  .box {
+    max-width: 65%;
+    padding: 20px;
+  }
+
+  input[type="text"],
+  .whatsapp-btn {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .quadro-aviso {
+    font-size: 14px;
+  }
+}
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+</head>
+<body>
+  <img src="logo-tracecom.png" alt="Logo da Tracecom" class="logo" />
+
+  <div class="container">
+    <div class="box">
+      <h2>Parabéns! Você está prestes a aproveitar um benefício exclusivo com seu CUPOM de indicação.</h2>
+      <input type="text" id="nomeCliente" placeholder="Digite seu nome">
+      <button class="whatsapp-btn" onclick="redirecionar()">Whatsapp - Falar com Atendente</button>
+
+      <div class="quadro-aviso">
+        <h4>Promoção do mês:</h4>
+        <p>Adquira a promoção do mês para ter acesso ao aplicativo em destaque na página!</p>
+        <p>Solicite ao atendente ;)</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function redirecionar() {
+    const nomeCliente = document.getElementById('nomeCliente').value.trim();
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token') || '';
+    const nomeResponsavel = decodeURIComponent(urlParams.get('nome') || 'um parceiro');
+
+    if (!nomeCliente) {
+      alert("Por favor, insira seu nome.");
+      return;
+    }
+
+    // ✅ Atualizar clique diretamente no sistema de indicação
+    let participantes = JSON.parse(localStorage.getItem('participantes')) || [];
+    const participante = participantes.find(x => x.token === token);
+    if (participante) {
+      participante.cliques = (participante.cliques || 0) + 1;
+      localStorage.setItem('participantes', JSON.stringify(participantes));
+    }
+
+    // ✅ Mensagem com nome do cliente e nome do responsável (participante)
+    const mensagem = encodeURIComponent(`Olá! me chamo ${nomeCliente}, gostaria de Contratar o serviço de vocês. Estou usando o CUPOM de ativação indicado por ${nomeResponsavel} para obter mais benefícios!`);
+    const link = `https://wa.me/552135000188?text=${mensagem}`;
+    window.open(link, '_blank');
+  }
+</script>
+<footer style="
+  text-align: center;
+  margin-top: -70px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+">
+  <img src="logo-streaming.png" alt="Logo do Streaming" style="width: 120px; opacity: 0.9;" />
+</footer>
+</body>
+</html>
